@@ -1,12 +1,6 @@
 // This #include statement was automatically added by the Particle IDE.
 #include "ReclaimerLabs_ADS1118/ReclaimerLabs_ADS1118.h"
 
-// This #include statement was automatically added by the Particle IDE.
-#include "ReclaimerLabs_Thermocouple/ReclaimerLabs_Thermocouple.h"
-
-// This #include statement was automatically added by the Particle IDE.
-#include "SparkFunPhant/SparkFunPhant.h"
-
 /*
  * Be sure to add the following libraries to your project
  *          ReclaimerLabs_ADS1118 (this one, should be added by default)
