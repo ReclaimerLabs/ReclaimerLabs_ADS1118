@@ -19,11 +19,12 @@ volatile uint32_t counter;
  * you need to fill out your own public and private key from SparkFun
  * Go to data.sparkfun.com to create your own stream and get keys
  * Create a stream with the following fields:
- *      tempRef_C
- *      temp0_C
- *      temp1_C
- *      temp2_C
- *      temp3_C
+ *      tempref_c
+ *      temp0_c
+ *      temp1_c
+ *      temp2_c
+ *      temp3_c
+ * The names much match exactly. Capitalization must be lower case. 
  */
 const char server[] = "data.sparkfun.com"; // Phant destination server
 const char publicKey[] = ""; // Phant public key
@@ -72,7 +73,7 @@ void readTemps() {
     tempRef_C += therm23.readTemp_C();
     tempRef_C  = tempRef_C / 2;
     sprintf(publishString, "%4.2f", tempRef_C);
-    phant.add("tempref", tempRef_C);
+    phant.add("tempref_c", tempRef_C);
     Particle.publish("tempRef_C", publishString);
     delay(500); // so as to not overwhelm the Particle cloud
     
@@ -80,10 +81,10 @@ void readTemps() {
     error_code = ReclaimerLabs_Thermocouple::calc_temp(TYPE_K, temp_mV, tempRef_C, &temp_C);
     if (error_code == 0) {
         sprintf(publishString, "%4.2f", temp_C);
-        phant.add("temp0", temp_C);
+        phant.add("temp0_c", temp_C);
     } else {
         sprintf(publishString, "%ld", 1000*error_code);
-        phant.add("temp0", 1000.0*error_code);
+        phant.add("temp0_c", 1000.0*error_code);
     }
     Particle.publish("temp0_C", publishString);
     delay(500); // so as to not overwhelm the Particle cloud
@@ -92,10 +93,10 @@ void readTemps() {
     error_code = ReclaimerLabs_Thermocouple::calc_temp(TYPE_K, temp_mV, tempRef_C, &temp_C);
     if (error_code == 0) {
         sprintf(publishString, "%4.2f", temp_C);
-        phant.add("temp1", temp_C);
+        phant.add("temp1_c", temp_C);
     } else {
         sprintf(publishString, "%ld", 1000*error_code);
-        phant.add("temp1", 1000.0*error_code);
+        phant.add("temp1_c", 1000.0*error_code);
     }
     Particle.publish("temp1_C", publishString);
     delay(500); // so as to not overwhelm the Particle cloud
@@ -104,10 +105,10 @@ void readTemps() {
     error_code = ReclaimerLabs_Thermocouple::calc_temp(TYPE_K, temp_mV, tempRef_C, &temp_C);
     if (error_code == 0) {
         sprintf(publishString, "%4.2f", temp_C);
-        phant.add("temp2", temp_C);
+        phant.add("temp2_c", temp_C);
     } else {
         sprintf(publishString, "%ld", 1000*error_code);
-        phant.add("temp2", 1000.0*error_code);
+        phant.add("temp2_c", 1000.0*error_code);
     }
     Particle.publish("temp2_C", publishString);
     delay(500); // so as to not overwhelm the Particle cloud
@@ -116,10 +117,10 @@ void readTemps() {
     error_code = ReclaimerLabs_Thermocouple::calc_temp(TYPE_K, temp_mV, tempRef_C, &temp_C);
     if (error_code == 0) {
         sprintf(publishString, "%4.2f", temp_C);
-        phant.add("temp3", temp_C);
+        phant.add("temp3_c", temp_C);
     } else {
         sprintf(publishString, "%ld", 1000*error_code);
-        phant.add("temp3", 1000.0*error_code);
+        phant.add("temp3_c", 1000.0*error_code);
     }
     Particle.publish("temp3_C", publishString);
     delay(500); // so as to not overwhelm the Particle cloud
