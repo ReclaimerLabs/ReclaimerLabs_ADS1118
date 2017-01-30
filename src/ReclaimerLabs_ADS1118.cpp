@@ -1,4 +1,4 @@
-#include "application.h"
+#include <application.h>
 #include "ReclaimerLabs_ADS1118.h"
 
 static uint32_t writeSPI32(uint32_t data_in, uint16_t pin_CS) {

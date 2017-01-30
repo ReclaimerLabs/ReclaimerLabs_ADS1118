@@ -1,7 +1,0 @@
-{
-	"name": "ReclaimerLabs_ADS1118",
-	"author": "Jason Cerundolo",
-	"version": "0.9.2",
-	"license": "MIT",
-	"description": "Library for the ADS1118 ADC"
-}
