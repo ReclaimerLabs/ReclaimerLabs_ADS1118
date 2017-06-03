@@ -59,7 +59,7 @@ void loop() {
 
 void readTemps() {
     int32_t error_code;
-    float temp_mV, temp_C, tempRef_C;
+    double temp_mV, temp_C, tempRef_C;
     
     digitalWrite(D7, HIGH);
     

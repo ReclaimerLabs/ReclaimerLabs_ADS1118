@@ -273,13 +273,13 @@ int16_t ReclaimerLabs_ADS1118::readTemp_Raw() {
     return return_val;
 }
 
-float ReclaimerLabs_ADS1118::readTemp_C() {
+double ReclaimerLabs_ADS1118::readTemp_C() {
     return (ADS1118_CONST_C_PER_BIT * this->readTemp_Raw());
 }
 
-float ReclaimerLabs_ADS1118::readADC_Diff_0_1_mV() {
+double ReclaimerLabs_ADS1118::readADC_Diff_0_1_mV() {
     int16_t rawADC = this->readADC_Differential_0_1();
-    float return_val=0;
+    double return_val=0;
     switch (this->m_gain) {
         case(GAIN_TWOTHIRDS): // ADS1118_CONFIG_PGA_6_144V
             return_val = (ADS1118_CONST_6_144V_LSB_mV * rawADC);
@@ -304,9 +304,9 @@ float ReclaimerLabs_ADS1118::readADC_Diff_0_1_mV() {
     return return_val;
 }
 
-float ReclaimerLabs_ADS1118::readADC_Diff_2_3_mV() {
+double ReclaimerLabs_ADS1118::readADC_Diff_2_3_mV() {
     int16_t rawADC = this->readADC_Differential_2_3();
-    float return_val=0;
+    double return_val=0;
     switch (this->m_gain) {
         case(GAIN_TWOTHIRDS): // ADS1118_CONFIG_PGA_6_144V
             return_val = (ADS1118_CONST_6_144V_LSB_mV * rawADC);

@@ -80,10 +80,10 @@ class ReclaimerLabs_ADS1118 {
         uint16_t  readADC_SingleEnded(uint8_t channel);
         int16_t   readADC_Differential_0_1(void);
         int16_t   readADC_Differential_2_3(void);
-        float     readADC_Diff_0_1_mV();
-        float     readADC_Diff_2_3_mV();
+        double    readADC_Diff_0_1_mV();
+        double    readADC_Diff_2_3_mV();
         int16_t   readTemp_Raw(void);
-        float     readTemp_C(void);
+        double    readTemp_C(void);
         void      setGain(adsGain_t gain);
         adsGain_t getGain(void);
     
