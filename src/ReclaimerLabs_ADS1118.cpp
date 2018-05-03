@@ -1,25 +1,39 @@
-#include <application.h>
+#ifdef ARDUINO
+    #include <Arduino.h>
+    #include <SPI.h>
+#else
+    #include <application.h>
+#endif
 #include "ReclaimerLabs_ADS1118.h"
 
 static uint32_t writeSPI32(uint32_t data_in, uint16_t pin_CS) {
     uint32_t data_out=0;
     
+#ifdef ARDUINO
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE1));
+#else
     SPI.begin(SPI_MODE_MASTER);
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE1);
     // max clock speed is 4 MHz, but we'll use 2 MHz to be safe
     SPI.setClockSpeed(2, MHZ);
+#endif
     
     digitalWrite(pin_CS, LOW);
     delayMicroseconds(1);
-    data_out  = ((SPI.transfer((data_in>>24) & 0xFF)) << 24);
-    data_out |= ((SPI.transfer((data_in>>16) & 0xFF)) << 16);
-    data_out |= ((SPI.transfer((data_in>>8) & 0xFF)) << 8);
-    data_out |=  (SPI.transfer( data_in     & 0xFF));
+    data_out  = (((uint32_t)SPI.transfer((data_in>>24) & 0xFF)) << 24);
+    data_out |= (((uint32_t)SPI.transfer((data_in>>16) & 0xFF)) << 16);
+    data_out |= (((uint32_t)SPI.transfer((data_in>>8) & 0xFF)) << 8);
+    data_out |=  ((uint32_t)SPI.transfer( data_in     & 0xFF));
     delayMicroseconds(1);
     digitalWrite(pin_CS, HIGH);
     
+#ifdef ARDUINO
+    SPI.endTransaction();
+#else
     SPI.end();
+#endif
     delayMicroseconds(1);
     
     return data_out;
@@ -27,21 +41,30 @@ static uint32_t writeSPI32(uint32_t data_in, uint16_t pin_CS) {
 
 static uint16_t writeSPI16(uint16_t data_in, uint16_t pin_CS) {
     uint16_t data_out=0;
-    
+
+#ifdef ARDUINO
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE1));
+#else
     SPI.begin(SPI_MODE_MASTER);
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE1);
     // max clock speed is 4 MHz, but we'll use 2 MHz to be safe
     SPI.setClockSpeed(2, MHZ);
-    
+#endif
+
     digitalWrite(pin_CS, LOW);
     delayMicroseconds(1);
-    data_out |= ((SPI.transfer((data_in>>8) & 0xFF)) << 8);
-    data_out |=  (SPI.transfer( data_in     & 0xFF));
+    data_out |= (((uint32_t)SPI.transfer((data_in>>8) & 0xFF)) << 8);
+    data_out |=  ((uint32_t)SPI.transfer( data_in     & 0xFF));
     delayMicroseconds(1);
     digitalWrite(pin_CS, HIGH);
     
+#ifdef ARDUINO
+    SPI.endTransaction();
+#else
     SPI.end();
+#endif
     delayMicroseconds(1);
     
     return data_out;
@@ -101,15 +124,26 @@ uint16_t ReclaimerLabs_ADS1118::readADC_SingleEnded(uint8_t channel) {
     // nDRDY low indicates data is ready
     int i;
     pinMode(this->m_pin_CS, OUTPUT);
+#if ARDUINO
+    pinMode(MISO, INPUT);
+#else
     pinMode(A4, INPUT);
+#endif
     for (i=16; i>=0; i--) {
         int j;
+#ifdef ARDUINO
+        digitalWrite(this->m_pin_CS, LOW);
+        delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
+        j = digitalRead(MISO);
+        digitalWrite(this->m_pin_CS, HIGH);
+#else
         ATOMIC_BLOCK() {
             pinResetFast(this->m_pin_CS);
             delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
             j = pinReadFast(A4);
             pinSetFast(this->m_pin_CS);
         }
+#endif
         if (!j) {
             break;
         } else {
@@ -148,14 +182,26 @@ int16_t ReclaimerLabs_ADS1118::readADC_Differential_0_1() {
     int i;
     pinMode(this->m_pin_CS, OUTPUT);
     pinMode(A4, INPUT);
+#if ARDUINO
+    pinMode(MISO, INPUT);
+#else
+    pinMode(A4, INPUT);
+#endif
     for (i=16; i>=0; i--) {
         int j;
+#ifdef ARDUINO
+        digitalWrite(this->m_pin_CS, LOW);
+        delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
+        j = digitalRead(MISO);
+        digitalWrite(this->m_pin_CS, HIGH);
+#else
         ATOMIC_BLOCK() {
             pinResetFast(this->m_pin_CS);
             delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
             j = pinReadFast(A4);
             pinSetFast(this->m_pin_CS);
         }
+#endif
         if (!j) {
             break;
         } else {
@@ -195,15 +241,26 @@ int16_t ReclaimerLabs_ADS1118::readADC_Differential_2_3() {
     // nDRDY low indicates data is ready
     int i;
     pinMode(this->m_pin_CS, OUTPUT);
+#if ARDUINO
+    pinMode(MISO, INPUT);
+#else
     pinMode(A4, INPUT);
+#endif
     for (i=16; i>=0; i--) {
         int j;
+#ifdef ARDUINO
+        digitalWrite(this->m_pin_CS, LOW);
+        delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
+        j = digitalRead(MISO);
+        digitalWrite(this->m_pin_CS, HIGH);
+#else
         ATOMIC_BLOCK() {
             pinResetFast(this->m_pin_CS);
             delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
             j = pinReadFast(A4);
             pinSetFast(this->m_pin_CS);
         }
+#endif
         if (!j) {
             break;
         } else {
@@ -240,15 +297,26 @@ int16_t ReclaimerLabs_ADS1118::readTemp_Raw() {
     // nDRDY low indicates data is ready
     int i;
     pinMode(this->m_pin_CS, OUTPUT);
+#if ARDUINO
+    pinMode(MISO, INPUT);
+#else
     pinMode(A4, INPUT);
+#endif
     for (i=16; i>=0; i--) {
         int j;
+#ifdef ARDUINO
+        digitalWrite(this->m_pin_CS, LOW);
+        delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
+        j = digitalRead(MISO);
+        digitalWrite(this->m_pin_CS, HIGH);
+#else
         ATOMIC_BLOCK() {
             pinResetFast(this->m_pin_CS);
             delayMicroseconds(1);       // at least 100 ns to meet t_CSDOD
             j = pinReadFast(A4);
             pinSetFast(this->m_pin_CS);
         }
+#endif
         if (!j) {
             break;
         } else {

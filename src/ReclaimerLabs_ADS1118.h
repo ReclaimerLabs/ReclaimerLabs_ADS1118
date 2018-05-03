@@ -1,7 +1,11 @@
 #ifndef RECLAIMERLABS_ADS1118_H
 #define RECLAIMERLABS_ADS1118_H
 
-#include <application.h>
+#ifdef ARDUINO
+  #include <Arduino.h>
+#else
+  #include <application.h>
+#endif
 
 #define ADS1118_CONFIG_SS_START_MASK 0x8000
 #define ADS1118_CONFIG_SS_START_ON   0x8000
